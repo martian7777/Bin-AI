@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import type { ProviderInfo } from "../shared/types";
+import { EditorProvider } from "./editorStore";
+import { Editor } from "./components/Editor";
 import { KeysSettings } from "./components/KeysSettings";
 import { GenerateView } from "./components/GenerateView";
 
-type Tab = "generate" | "settings";
+type Tab = "editor" | "generate" | "settings";
 
 export function App() {
-  const [tab, setTab] = useState<Tab>("generate");
+  const [tab, setTab] = useState<Tab>("editor");
   const [providers, setProviders] = useState<ProviderInfo[]>([]);
 
   const refresh = useCallback(async () => {
@@ -20,8 +22,12 @@ export function App() {
   const anyKey = providers.some((p) => p.hasKey);
 
   return (
+    <EditorProvider>
     <div className="app">
       <div className="tabs">
+        <button className={`tab ${tab === "editor" ? "active" : ""}`} onClick={() => setTab("editor")}>
+          Editor
+        </button>
         <button className={`tab ${tab === "generate" ? "active" : ""}`} onClick={() => setTab("generate")}>
           Generate
         </button>
@@ -29,8 +35,10 @@ export function App() {
           API Keys
         </button>
       </div>
-      <div className="body">
-        {tab === "settings" ? (
+      <div className={`body ${tab === "editor" ? "body-editor" : ""}`}>
+        {tab === "editor" ? (
+          <Editor />
+        ) : tab === "settings" ? (
           <KeysSettings providers={providers} onChange={refresh} />
         ) : anyKey ? (
           <GenerateView providers={providers} />
@@ -48,5 +56,6 @@ export function App() {
         )}
       </div>
     </div>
+    </EditorProvider>
   );
 }

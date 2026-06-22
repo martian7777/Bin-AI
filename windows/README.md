@@ -6,15 +6,25 @@ provider directly for what you generate.
 
 Built with Electron + Vite + React + TypeScript so it runs where the Swift/AppKit original cannot.
 
-## Status — Phase 1
+## Status
 
+Phase 1 — AI generation (your own keys):
 - ✅ Runs on Windows
 - ✅ Encrypted local API-key storage (Windows credential store via Electron `safeStorage`)
-- ✅ Text generation: OpenAI, Gemini, OpenRouter
-- ✅ Image generation: OpenAI, Gemini, fal.ai, Replicate
-- ✅ Video generation: fal.ai, Replicate
-- ⬜ Media import, preview, timeline (Phase 2)
-- ⬜ FFmpeg export + ported ripple/timeline logic (Phase 3)
+- ✅ Text: OpenAI, Gemini, OpenRouter
+- ✅ Image: OpenAI, Gemini, OpenRouter, fal.ai, Replicate
+- ✅ Video: Gemini (Veo), fal.ai, Replicate — with inline playback + reveal-in-folder
+
+Phase 2 — editor foundation:
+- ✅ Media import (file picker + OS drag-and-drop), served over a sandboxed `media://` protocol
+- ✅ Metadata + thumbnails extracted in-renderer (no FFmpeg dependency yet)
+- ✅ Preview pane (scrubs video to the playhead)
+- ✅ Frame-based timeline ported from the Swift model: tracks, draggable clips, ruler/playhead, zoom, add/delete
+
+Phase 3 (next):
+- ⬜ FFmpeg-backed export
+- ⬜ Ported ripple/trim logic from the Swift `Models`/`Editor` code
+- ⬜ Project save/load (.json), send generated results straight to the timeline
 
 ## Run
 

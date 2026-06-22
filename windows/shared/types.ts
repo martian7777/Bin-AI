@@ -84,6 +84,11 @@ export interface PalmierApi {
   outputDir(): Promise<string>;
   revealInFolder(filePath: string): Promise<void>;
   openOutputDir(): Promise<void>;
+  // Phase 2: media import. pickFiles opens a native dialog and auto-allows the
+  // chosen paths for the media:// protocol; registerPaths does the same for
+  // files dropped from the OS (where we already have absolute paths).
+  pickFiles(): Promise<string[]>;
+  registerPaths(filePaths: string[]): Promise<void>;
 }
 
 // Builds a renderer-loadable URL for a local file served by the custom

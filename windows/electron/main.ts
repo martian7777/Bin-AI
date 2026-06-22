@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, net, protocol, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -27,6 +27,19 @@ function outputDir(): string {
   mkdirSync(dir, { recursive: true });
   return dir;
 }
+
+// Files the renderer is allowed to load over media:// — generated output plus
+// anything the user explicitly imported. Prevents arbitrary filesystem reads.
+const allowedMedia = new Set<string>();
+
+function allowMedia(paths: string[]) {
+  for (const p of paths) allowedMedia.add(p);
+}
+
+const MEDIA_EXTENSIONS = [
+  "mp4", "mov", "m4v", "webm", "mp3", "wav", "aac", "m4a", "ogg",
+  "png", "jpg", "jpeg", "tiff", "heic", "webp", "gif", "json", "lottie"
+];
 
 function extForMime(mime: string): string {
   if (mime.includes("png")) return "png";
@@ -110,6 +123,21 @@ function registerIpc() {
   });
 
   ipcMain.handle("openOutputDir", () => shell.openPath(outputDir()));
+
+  ipcMain.handle("pickFiles", async (): Promise<string[]> => {
+    const res = await dialog.showOpenDialog({
+      title: "Import media",
+      properties: ["openFile", "multiSelections"],
+      filters: [{ name: "Media", extensions: MEDIA_EXTENSIONS }]
+    });
+    if (res.canceled) return [];
+    allowMedia(res.filePaths);
+    return res.filePaths;
+  });
+
+  ipcMain.handle("registerPaths", (_e, filePaths: string[]) => {
+    allowMedia(filePaths);
+  });
 }
 
 function createWindow() {
@@ -133,7 +161,7 @@ app.whenReady().then(() => {
     const p = new URL(request.url).searchParams.get("p");
     if (!p) return new Response("missing path", { status: 400 });
     const filePath = decodeURIComponent(p);
-    if (!filePath.startsWith(outputDir())) {
+    if (!filePath.startsWith(outputDir()) && !allowedMedia.has(filePath)) {
       return new Response("forbidden", { status: 403 });
     }
     return net.fetch(pathToFileURL(filePath).toString());

@@ -19,7 +19,9 @@ const api: PalmierApi = {
   generateVideo: (req: VideoRequest) => ipcRenderer.invoke("generateVideo", req),
   outputDir: () => ipcRenderer.invoke("outputDir"),
   revealInFolder: (filePath: string) => ipcRenderer.invoke("revealInFolder", filePath),
-  openOutputDir: () => ipcRenderer.invoke("openOutputDir")
+  openOutputDir: () => ipcRenderer.invoke("openOutputDir"),
+  pickFiles: () => ipcRenderer.invoke("pickFiles"),
+  registerPaths: (filePaths: string[]) => ipcRenderer.invoke("registerPaths", filePaths)
 };
 
 contextBridge.exposeInMainWorld("palmier", api);
