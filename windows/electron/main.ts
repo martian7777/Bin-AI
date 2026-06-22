@@ -1,7 +1,7 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, net, protocol, shell } from "electron";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import type {
   Capability,
   ImageRequest,
@@ -15,6 +15,12 @@ import { PROVIDERS, PROVIDER_LIST } from "./providers/registry";
 import { ProviderError, type ProviderRuntime, type SavedImage, type SavedVideo } from "./providers/types";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
+
+// Lets the renderer play locally-saved videos under a CSP-friendly scheme
+// without exposing the whole filesystem (only files inside the output dir).
+protocol.registerSchemesAsPrivileged([
+  { scheme: "media", privileges: { secure: true, stream: true, supportFetchAPI: true } }
+]);
 
 function outputDir(): string {
   const dir = join(app.getPath("videos"), "PalmierPro");
@@ -98,6 +104,12 @@ function registerIpc() {
   });
 
   ipcMain.handle("outputDir", () => outputDir());
+
+  ipcMain.handle("revealInFolder", (_e, filePath: string) => {
+    shell.showItemInFolder(filePath);
+  });
+
+  ipcMain.handle("openOutputDir", () => shell.openPath(outputDir()));
 }
 
 function createWindow() {
@@ -117,6 +129,16 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  protocol.handle("media", (request) => {
+    const p = new URL(request.url).searchParams.get("p");
+    if (!p) return new Response("missing path", { status: 400 });
+    const filePath = decodeURIComponent(p);
+    if (!filePath.startsWith(outputDir())) {
+      return new Response("forbidden", { status: 403 });
+    }
+    return net.fetch(pathToFileURL(filePath).toString());
+  });
+
   registerIpc();
   createWindow();
   app.on("activate", () => {

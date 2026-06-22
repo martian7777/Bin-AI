@@ -82,4 +82,12 @@ export interface PalmierApi {
   generateImage(req: ImageRequest): Promise<ImageResult>;
   generateVideo(req: VideoRequest): Promise<VideoResult>;
   outputDir(): Promise<string>;
+  revealInFolder(filePath: string): Promise<void>;
+  openOutputDir(): Promise<void>;
+}
+
+// Builds a renderer-loadable URL for a local file served by the custom
+// `media://` protocol (registered in the main process).
+export function mediaUrl(filePath: string): string {
+  return `media://f/?p=${encodeURIComponent(filePath)}`;
 }

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import type {
-  Capability,
-  GeneratedImage,
-  ModelInfo,
-  ProviderId,
-  ProviderInfo
+import {
+  mediaUrl,
+  type Capability,
+  type GeneratedImage,
+  type ModelInfo,
+  type ProviderId,
+  type ProviderInfo
 } from "../../shared/types";
 
 const CAPS: { id: Capability; label: string }[] = [
@@ -190,6 +191,9 @@ export function GenerateView({ providers }: { providers: ProviderInfo[] }) {
             {busy && cap === "video" && (
               <span className="spinner">Video can take a minute or two — polling the provider…</span>
             )}
+            <button className="ghost" onClick={() => window.palmier.openOutputDir()}>
+              Open output folder
+            </button>
           </div>
 
           {error && <div className="error">{error}</div>}
@@ -206,6 +210,11 @@ export function GenerateView({ providers }: { providers: ProviderInfo[] }) {
                 <div className="result-tile" key={i}>
                   <img src={img.dataUrl} alt="" />
                   <div className="path">{img.filePath}</div>
+                  <div style={{ padding: "0 8px 8px" }}>
+                    <span className="linklike" onClick={() => window.palmier.revealInFolder(img.filePath)}>
+                      Reveal in folder
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -213,8 +222,12 @@ export function GenerateView({ providers }: { providers: ProviderInfo[] }) {
 
           {videoPath && (
             <div className="card" style={{ marginTop: 14 }}>
-              <h3>Video saved</h3>
+              <h3>Video</h3>
+              <video src={mediaUrl(videoPath)} controls autoPlay loop style={{ width: "100%", borderRadius: 8 }} />
               <div className="path">{videoPath}</div>
+              <span className="linklike" onClick={() => window.palmier.revealInFolder(videoPath)}>
+                Reveal in folder
+              </span>
             </div>
           )}
         </>
