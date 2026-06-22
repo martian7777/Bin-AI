@@ -1,0 +1,25 @@
+{
+  "changelogURL": "https://github.com/palmier-io/palmier-pro/releases",
+  "entries": [
+    {
+      "version": "0.3.6",
+      "date": "2026-06-22",
+      "sections": [
+        {
+          "heading": "Improved",
+          "items": [
+            "Improve app hang performance",
+            "Pressing Play at the end of a video now starts playback from the beginning"
+          ]
+        },
+        {
+          "heading": "Fixed",
+          "items": [
+            "Fixed incorrect 720p HEVC export behavior",
+            "Fixed text color parsing when pasted hex values include line breaks"
+          ]
+        }
+      ]
+    }
+  ]
+}
