@@ -12,9 +12,6 @@
 
 <sub><i>Yêu cầu macOS 26 (Tahoe) trên Apple Silicon</i></sub>
 
-<a href="https://x.com/Palmier_io"><img src="https://img.shields.io/badge/Follow-%40Palmier__io-000000?style=flat&logo=x&logoColor=white" alt="Theo dõi trên X" /></a>
-<a href="https://discord.com/invite/SMVW6pKYmg"><img src="https://img.shields.io/badge/Join-Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="Tham gia Discord" /></a>
-<a href="https://www.ycombinator.com/companies/palmier"><img src="https://img.shields.io/badge/Y%20Combinator-S24-orange" alt="Y Combinator S24" /></a>
 
 <p>
   <a href="../../README.md">English</a> ·
@@ -35,7 +32,7 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="Giao diện Bin AI" width="900" />
+<img src="../../assets/bin-ui.png" alt="Giao diện Bin AI" width="900" />
 
 ---
 
@@ -110,10 +107,7 @@ Xem [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Cộng đồng và hỗ trợ
 
-- **Discord:** Tham gia cộng đồng trên **[Discord](https://discord.com/invite/SMVW6pKYmg)**.
-- **Twitter / X:** Theo dõi **[@Palmier_io](https://x.com/Palmier_io)** để nhận cập nhật và thông báo.
-- **Instagram:** Theo dõi [@palmier.io](https://www.instagram.com/palmier.io).
-- **Phản hồi và hỗ trợ:** Tạo [GitHub Issue](https://github.com/martian7777/Bin-AI/issues) hoặc gửi email tới founders@palmier.io.
+- **Phản hồi và hỗ trợ:** Tạo [GitHub Issue](https://github.com/martian7777/Bin-AI/issues)
 
 ## Star History
 

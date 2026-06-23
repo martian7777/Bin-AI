@@ -12,9 +12,6 @@
 
 <sub><i>Apple Silicon 기반 macOS 26 (Tahoe) 필요</i></sub>
 
-<a href="https://x.com/Palmier_io"><img src="https://img.shields.io/badge/Follow-%40Palmier__io-000000?style=flat&logo=x&logoColor=white" alt="X에서 팔로우" /></a>
-<a href="https://discord.com/invite/SMVW6pKYmg"><img src="https://img.shields.io/badge/Join-Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="Discord 참여" /></a>
-<a href="https://www.ycombinator.com/companies/palmier"><img src="https://img.shields.io/badge/Y%20Combinator-S24-orange" alt="Y Combinator S24" /></a>
 
 <p>
   <a href="../../README.md">English</a> ·
@@ -35,7 +32,7 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="Bin AI UI" width="900" />
+<img src="../../assets/bin-ui.png" alt="Bin AI UI" width="900" />
 
 ---
 
@@ -110,10 +107,7 @@ Apple Silicon 기반 macOS 26 (Tahoe)만 지원합니다.
 
 ## 커뮤니티 및 지원
 
-- **Discord:** **[Discord](https://discord.com/invite/SMVW6pKYmg)**에서 커뮤니티에 참여하세요.
-- **Twitter / X:** 업데이트와 공지는 **[@Palmier_io](https://x.com/Palmier_io)**를 팔로우하세요.
-- **Instagram:** [@palmier.io](https://www.instagram.com/palmier.io)를 팔로우하세요.
-- **피드백 및 지원:** [GitHub Issue](https://github.com/martian7777/Bin-AI/issues)를 만들거나 founders@palmier.io로 이메일을 보내세요.
+- **피드백 및 지원:** [GitHub Issue](https://github.com/martian7777/Bin-AI/issues)
 
 ## Star History
 

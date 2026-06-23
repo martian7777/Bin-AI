@@ -12,9 +12,6 @@
 
 <sub><i>需要搭载 Apple Silicon 的 macOS 26 (Tahoe)</i></sub>
 
-<a href="https://x.com/Palmier_io"><img src="https://img.shields.io/badge/Follow-%40Palmier__io-000000?style=flat&logo=x&logoColor=white" alt="在 X 上关注" /></a>
-<a href="https://discord.com/invite/SMVW6pKYmg"><img src="https://img.shields.io/badge/Join-Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="加入 Discord" /></a>
-<a href="https://www.ycombinator.com/companies/palmier"><img src="https://img.shields.io/badge/Y%20Combinator-S24-orange" alt="Y Combinator S24" /></a>
 
 <p>
   <a href="../../README.md">English</a> ·
@@ -35,7 +32,7 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="Bin AI 界面" width="900" />
+<img src="../../assets/bin-ui.png" alt="Bin AI 界面" width="900" />
 
 ---
 
@@ -110,10 +107,7 @@ codex mcp add bin-ai --url http://127.0.0.1:19789/mcp
 
 ## 社区与支持
 
-- **Discord:** 在 **[Discord](https://discord.com/invite/SMVW6pKYmg)** 加入社区。
-- **Twitter / X:** 关注 **[@Palmier_io](https://x.com/Palmier_io)** 获取更新和公告。
-- **Instagram:** 关注 [@palmier.io](https://www.instagram.com/palmier.io)。
-- **反馈与支持:** 创建 [GitHub Issue](https://github.com/martian7777/Bin-AI/issues) 或发送邮件至 founders@palmier.io。
+- **反馈与支持:** 创建 [GitHub Issue](https://github.com/martian7777/Bin-AI/issues)
 
 ## Star History
 

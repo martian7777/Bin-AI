@@ -12,9 +12,6 @@
 
 <sub><i>Apple Silicon पर macOS 26 (Tahoe) आवश्यक</i></sub>
 
-<a href="https://x.com/Palmier_io"><img src="https://img.shields.io/badge/Follow-%40Palmier__io-000000?style=flat&logo=x&logoColor=white" alt="X पर फॉलो करें" /></a>
-<a href="https://discord.com/invite/SMVW6pKYmg"><img src="https://img.shields.io/badge/Join-Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="Discord से जुड़ें" /></a>
-<a href="https://www.ycombinator.com/companies/palmier"><img src="https://img.shields.io/badge/Y%20Combinator-S24-orange" alt="Y Combinator S24" /></a>
 
 <p>
   <a href="../../README.md">English</a> ·
@@ -35,7 +32,7 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="Bin AI UI" width="900" />
+<img src="../../assets/bin-ui.png" alt="Bin AI UI" width="900" />
 
 ---
 
@@ -110,10 +107,7 @@ Generative AI features के लिए login और subscription चाहि�
 
 ## Community और support
 
-- **Discord:** **[Discord](https://discord.com/invite/SMVW6pKYmg)** पर community से जुड़ें।
-- **Twitter / X:** Updates और announcements के लिए **[@Palmier_io](https://x.com/Palmier_io)** को follow करें।
-- **Instagram:** [@palmier.io](https://www.instagram.com/palmier.io) को follow करें।
-- **Feedback और support:** [GitHub Issue](https://github.com/martian7777/Bin-AI/issues) बनाएं या founders@palmier.io पर email करें।
+- **Feedback और support:** [GitHub Issue](https://github.com/martian7777/Bin-AI/issues)
 
 ## Star History
 
