@@ -7,6 +7,7 @@ import {
   type ProviderId,
   type ProviderInfo
 } from "../../shared/types";
+import { useEditor } from "../editorStore";
 
 const CAPS: { id: Capability; label: string }[] = [
   { id: "image", label: "Image" },
@@ -17,8 +18,18 @@ const CAPS: { id: Capability; label: string }[] = [
 const ASPECTS = ["16:9", "9:16", "1:1", "4:3", "3:4"];
 
 export function GenerateView({ providers }: { providers: ProviderInfo[] }) {
+  const ed = useEditor();
   const keyed = useMemo(() => providers.filter((p) => p.hasKey), [providers]);
   const [cap, setCap] = useState<Capability>("image");
+  const [sent, setSent] = useState<string>("");
+
+  const sendToTimeline = async (filePath: string) => {
+    const [asset] = await ed.importPaths([filePath]);
+    if (asset) {
+      ed.addAssetToTimeline(asset.id, ed.playhead);
+      setSent(filePath);
+    }
+  };
 
   const eligible = useMemo(
     () => keyed.filter((p) => p.capabilities.includes(cap)),
@@ -210,7 +221,10 @@ export function GenerateView({ providers }: { providers: ProviderInfo[] }) {
                 <div className="result-tile" key={i}>
                   <img src={img.dataUrl} alt="" />
                   <div className="path">{img.filePath}</div>
-                  <div style={{ padding: "0 8px 8px" }}>
+                  <div className="row" style={{ padding: "0 8px 8px", gap: 10 }}>
+                    <span className="linklike" onClick={() => sendToTimeline(img.filePath)}>
+                      {sent === img.filePath ? "Added ✓" : "Add to timeline"}
+                    </span>
                     <span className="linklike" onClick={() => window.palmier.revealInFolder(img.filePath)}>
                       Reveal in folder
                     </span>
@@ -225,9 +239,14 @@ export function GenerateView({ providers }: { providers: ProviderInfo[] }) {
               <h3>Video</h3>
               <video src={mediaUrl(videoPath)} controls autoPlay loop style={{ width: "100%", borderRadius: 8 }} />
               <div className="path">{videoPath}</div>
-              <span className="linklike" onClick={() => window.palmier.revealInFolder(videoPath)}>
-                Reveal in folder
-              </span>
+              <div className="row" style={{ gap: 12 }}>
+                <span className="linklike" onClick={() => sendToTimeline(videoPath)}>
+                  {sent === videoPath ? "Added ✓" : "Add to timeline"}
+                </span>
+                <span className="linklike" onClick={() => window.palmier.revealInFolder(videoPath)}>
+                  Reveal in folder
+                </span>
+              </div>
             </div>
           )}
         </>

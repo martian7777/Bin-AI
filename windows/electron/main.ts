@@ -1,16 +1,21 @@
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import type {
   Capability,
+  ExportRequest,
+  ExportResult,
   ImageRequest,
+  ProjectFile,
   ProviderId,
   ProviderInfo,
   TextRequest,
   VideoRequest
 } from "../shared/types";
+import type { MediaAsset } from "../shared/timeline";
 import { clearKey, getKey, hasKey, setKey } from "./keys";
+import { runExport } from "./export";
 import { PROVIDERS, PROVIDER_LIST } from "./providers/registry";
 import { ProviderError, type ProviderRuntime, type SavedImage, type SavedVideo } from "./providers/types";
 
@@ -137,6 +142,46 @@ function registerIpc() {
 
   ipcMain.handle("registerPaths", (_e, filePaths: string[]) => {
     allowMedia(filePaths);
+  });
+
+  ipcMain.handle("exportTimeline", async (e, req: ExportRequest): Promise<ExportResult | null> => {
+    const res = await dialog.showSaveDialog({
+      title: "Export video",
+      defaultPath: join(outputDir(), `export-${Date.now()}.mp4`),
+      filters: [{ name: "MP4", extensions: ["mp4"] }]
+    });
+    if (res.canceled || !res.filePath) return null;
+
+    const assetMap = new Map<string, MediaAsset>(req.assets.map((a) => [a.id, a]));
+    const sender = e.sender;
+    await runExport(req.timeline, assetMap, res.filePath, (line) =>
+      sender.send("export:progress", line)
+    );
+    return { outputPath: res.filePath };
+  });
+
+  ipcMain.handle("saveProject", async (_e, data: ProjectFile): Promise<string | null> => {
+    const res = await dialog.showSaveDialog({
+      title: "Save project",
+      defaultPath: join(app.getPath("documents"), "untitled.palmier.json"),
+      filters: [{ name: "Palmier project", extensions: ["json"] }]
+    });
+    if (res.canceled || !res.filePath) return null;
+    writeFileSync(res.filePath, JSON.stringify(data, null, 2), "utf8");
+    return res.filePath;
+  });
+
+  ipcMain.handle("loadProject", async (): Promise<ProjectFile | null> => {
+    const res = await dialog.showOpenDialog({
+      title: "Open project",
+      properties: ["openFile"],
+      filters: [{ name: "Palmier project", extensions: ["json"] }]
+    });
+    if (res.canceled || res.filePaths.length === 0) return null;
+    const data = JSON.parse(readFileSync(res.filePaths[0], "utf8")) as ProjectFile;
+    // Re-allow every referenced media file so the renderer can load it again.
+    allowMedia(data.assets.map((a) => a.filePath));
+    return data;
   });
 }
 

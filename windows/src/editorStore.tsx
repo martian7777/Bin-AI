@@ -11,6 +11,7 @@ import {
   type Timeline,
   type Track
 } from "../shared/timeline";
+import { PROJECT_FILE_VERSION, type ProjectFile } from "../shared/types";
 import { buildAsset } from "./lib/metadata";
 
 interface EditorStore {
@@ -22,7 +23,10 @@ interface EditorStore {
   pxPerFrame: number;
 
   assetById(id: string): MediaAsset | undefined;
-  importPaths(paths: string[]): Promise<void>;
+  importPaths(paths: string[]): Promise<MediaAsset[]>;
+  addGeneratedAsset(asset: MediaAsset): void;
+  serialize(): ProjectFile;
+  hydrate(data: ProjectFile): void;
   selectAsset(id: string | null): void;
   selectClip(id: string | null): void;
   addAssetToTimeline(assetId: string, atFrame?: number): void;
@@ -54,9 +58,14 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     const built = (await Promise.all(paths.map(buildAsset))).filter(
       (a): a is MediaAsset => a !== null
     );
-    if (built.length === 0) return;
+    if (built.length === 0) return [];
     setAssets((prev) => [...prev, ...built]);
     setSelectedAssetId((cur) => cur ?? built[0].id);
+    return built;
+  }, []);
+
+  const addGeneratedAsset = useCallback((asset: MediaAsset) => {
+    setAssets((prev) => (prev.some((a) => a.id === asset.id) ? prev : [...prev, asset]));
   }, []);
 
   const addAssetToTimeline = useCallback(
@@ -131,6 +140,19 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
   const setPlayhead = useCallback((frame: number) => setPlayheadState(Math.max(0, Math.round(frame))), []);
 
+  const serialize = useCallback(
+    (): ProjectFile => ({ version: PROJECT_FILE_VERSION, timeline, assets }),
+    [timeline, assets]
+  );
+
+  const hydrate = useCallback((data: ProjectFile) => {
+    setAssets(data.assets);
+    setTimeline(data.timeline);
+    setSelectedAssetId(null);
+    setSelectedClipId(null);
+    setPlayheadState(0);
+  }, []);
+
   const store = useMemo<EditorStore>(
     () => ({
       assets,
@@ -141,6 +163,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       pxPerFrame,
       assetById,
       importPaths,
+      addGeneratedAsset,
+      serialize,
+      hydrate,
       selectAsset: (id) => {
         setSelectedAssetId(id);
         setSelectedClipId(null);
@@ -161,6 +186,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       pxPerFrame,
       assetById,
       importPaths,
+      addGeneratedAsset,
+      serialize,
+      hydrate,
       addAssetToTimeline,
       moveClip,
       removeClip,

@@ -21,10 +21,19 @@ Phase 2 — editor foundation:
 - ✅ Preview pane (scrubs video to the playhead)
 - ✅ Frame-based timeline ported from the Swift model: tracks, draggable clips, ruler/playhead, zoom, add/delete
 
-Phase 3 (next):
-- ⬜ FFmpeg-backed export
-- ⬜ Ported ripple/trim logic from the Swift `Models`/`Editor` code
-- ⬜ Project save/load (.json), send generated results straight to the timeline
+Phase 3 — export & persistence:
+- ✅ FFmpeg-backed export (bundled `ffmpeg-static`) — composites tracks onto a canvas via an overlay/`setpts` filtergraph with audio `amix`; validated end-to-end
+- ✅ Project save/load (`.palmier.json`) with media paths re-authorized on open
+- ✅ "Add to timeline" from the Generate tab — generated images/videos drop straight onto the timeline
+
+Later:
+- ⬜ Clip trim/split/speed UI (model already supports it)
+- ⬜ Ported ripple-edit logic from the Swift `Editor` code
+- ⬜ Real-time multi-track composited playback (preview is currently single-clip)
+
+### Packaging note
+`ffmpeg-static` resolves to a path inside `node_modules`. For a packaged build, add it to
+electron-builder `asarUnpack` so the binary is reachable at runtime.
 
 ## Run
 

@@ -119,6 +119,9 @@ button.ghost {
 /* ---- Editor (Phase 2) ---- */
 .body-editor { padding: 0; display: flex; }
 .editor { display: flex; flex-direction: column; width: 100%; height: 100%; }
+.editor-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.editor-bar button.primary { padding: 7px 14px; }
+.editor-status { margin-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
 .editor-top { display: flex; flex: 1; min-height: 0; }
 
 .media-panel {

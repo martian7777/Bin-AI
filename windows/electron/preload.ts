@@ -1,8 +1,10 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type {
   Capability,
+  ExportRequest,
   ImageRequest,
   PalmierApi,
+  ProjectFile,
   ProviderId,
   TextRequest,
   VideoRequest
@@ -21,7 +23,19 @@ const api: PalmierApi = {
   revealInFolder: (filePath: string) => ipcRenderer.invoke("revealInFolder", filePath),
   openOutputDir: () => ipcRenderer.invoke("openOutputDir"),
   pickFiles: () => ipcRenderer.invoke("pickFiles"),
-  registerPaths: (filePaths: string[]) => ipcRenderer.invoke("registerPaths", filePaths)
+  registerPaths: (filePaths: string[]) => ipcRenderer.invoke("registerPaths", filePaths),
+  exportTimeline: (req: ExportRequest) => ipcRenderer.invoke("exportTimeline", req),
+  saveProject: (data: ProjectFile) => ipcRenderer.invoke("saveProject", data),
+  loadProject: () => ipcRenderer.invoke("loadProject")
 };
 
 contextBridge.exposeInMainWorld("palmier", api);
+
+// Streamed ffmpeg progress lines for the export UI.
+contextBridge.exposeInMainWorld("palmierEvents", {
+  onExportProgress: (cb: (line: string) => void) => {
+    const handler = (_e: unknown, line: string) => cb(line);
+    ipcRenderer.on("export:progress", handler);
+    return () => ipcRenderer.removeListener("export:progress", handler);
+  }
+});

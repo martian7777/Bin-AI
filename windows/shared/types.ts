@@ -2,6 +2,8 @@
 // Mirrors the generation concepts from the Swift app (video/image/audio/upscale)
 // but routes to provider APIs directly instead of the Palmier backend.
 
+import type { MediaAsset, Timeline } from "./timeline";
+
 export type ProviderId = "openai" | "gemini" | "openrouter" | "fal" | "replicate";
 
 export type Capability = "text" | "image" | "video";
@@ -89,6 +91,27 @@ export interface PalmierApi {
   // files dropped from the OS (where we already have absolute paths).
   pickFiles(): Promise<string[]>;
   registerPaths(filePaths: string[]): Promise<void>;
+  // Phase 3: export + project persistence.
+  exportTimeline(req: ExportRequest): Promise<ExportResult | null>;
+  saveProject(data: ProjectFile): Promise<string | null>;
+  loadProject(): Promise<ProjectFile | null>;
+}
+
+export interface ExportRequest {
+  timeline: Timeline;
+  assets: MediaAsset[];
+}
+
+export interface ExportResult {
+  outputPath: string;
+}
+
+export const PROJECT_FILE_VERSION = 1;
+
+export interface ProjectFile {
+  version: number;
+  timeline: Timeline;
+  assets: MediaAsset[];
 }
 
 // Builds a renderer-loadable URL for a local file served by the custom
