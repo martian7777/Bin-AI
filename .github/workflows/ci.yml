@@ -25,8 +25,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .build
-          key: spm-${{ runner.os }}-${{ hashFiles('Package.resolved') }}
-          restore-keys: spm-${{ runner.os }}-
+          key: spm-${{ runner.os }}-${{ github.repository }}-${{ hashFiles('Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-${{ github.repository }}-
 
       - name: Build
         run: swift build
