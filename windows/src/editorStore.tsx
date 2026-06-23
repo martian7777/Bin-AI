@@ -32,6 +32,12 @@ interface EditorStore {
   addAssetToTimeline(assetId: string, atFrame?: number): void;
   moveClip(clipId: string, newStartFrame: number, newTrackId?: string): void;
   removeClip(clipId: string): void;
+  trimClip(clipId: string, edge: "start" | "end", deltaFrames: number): void;
+  splitClip(clipId: string, atFrame: number): void;
+  setClipSpeed(clipId: string, speed: number): void;
+  setClipVolume(clipId: string, volume: number): void;
+  toggleTrackMuted(trackId: string): void;
+  toggleTrackHidden(trackId: string): void;
   setPlayhead(frame: number): void;
   setPxPerFrame(v: number): void;
 }
@@ -138,6 +144,130 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     setSelectedClipId((cur) => (cur === clipId ? null : cur));
   }, []);
 
+  // Source frames available for a clip's media (∞ for stills, which loop).
+  const sourceFramesFor = useCallback(
+    (clip: Clip, fps: number): number => {
+      const asset = assets.find((a) => a.id === clip.mediaRef);
+      if (!asset || (asset.type !== "video" && asset.type !== "audio")) return Infinity;
+      return Math.max(1, secondsToFrames(asset.durationSeconds, fps));
+    },
+    [assets]
+  );
+
+  const mapClip = useCallback((clipId: string, fn: (c: Clip) => Clip) => {
+    setTimeline((tl) => ({
+      ...tl,
+      tracks: tl.tracks.map((t) => ({
+        ...t,
+        clips: t.clips.map((c) => (c.id === clipId ? fn(c) : c))
+      }))
+    }));
+  }, []);
+
+  // Drag a clip edge. `edge:"start"` moves the in-point (and timeline position);
+  // `edge:"end"` moves the out-point. Trim is clamped to ≥1 frame, ≥0 source
+  // offset, and (for video/audio) the available source length.
+  const trimClip = useCallback(
+    (clipId: string, edge: "start" | "end", deltaFrames: number) => {
+      mapClip(clipId, (clip) => {
+        const fps = timeline.fps;
+        const speed = clip.speed || 1;
+        const sourceFrames = sourceFramesFor(clip, fps);
+        let delta = Math.round(deltaFrames);
+        if (edge === "start") {
+          const min = Math.max(-clip.startFrame, Math.ceil(-clip.trimStartFrame / speed));
+          const max = clip.durationFrames - 1;
+          delta = Math.min(max, Math.max(min, delta));
+          const trimStartFrame = Math.max(0, Math.round(clip.trimStartFrame + delta * speed));
+          const durationFrames = clip.durationFrames - delta;
+          return {
+            ...clip,
+            startFrame: clip.startFrame + delta,
+            durationFrames,
+            trimStartFrame,
+            trimEndFrame: Math.round(trimStartFrame + durationFrames * speed)
+          };
+        }
+        const min = 1 - clip.durationFrames;
+        const max = Number.isFinite(sourceFrames)
+          ? Math.floor((sourceFrames - clip.trimStartFrame) / speed) - clip.durationFrames
+          : Number.MAX_SAFE_INTEGER;
+        delta = Math.min(max, Math.max(min, delta));
+        const durationFrames = clip.durationFrames + delta;
+        return {
+          ...clip,
+          durationFrames,
+          trimEndFrame: Math.round(clip.trimStartFrame + durationFrames * speed)
+        };
+      });
+    },
+    [mapClip, sourceFramesFor, timeline.fps]
+  );
+
+  const splitClip = useCallback((clipId: string, atFrame: number) => {
+    const at = Math.round(atFrame);
+    setTimeline((tl) => ({
+      ...tl,
+      tracks: tl.tracks.map((t) => {
+        if (!t.clips.some((c) => c.id === clipId)) return t;
+        const clips: Clip[] = [];
+        for (const c of t.clips) {
+          const end = c.startFrame + c.durationFrames;
+          if (c.id !== clipId || at <= c.startFrame || at >= end) {
+            clips.push(c);
+            continue;
+          }
+          const speed = c.speed || 1;
+          const leftDur = at - c.startFrame;
+          const cut = Math.round(c.trimStartFrame + leftDur * speed);
+          clips.push({ ...c, durationFrames: leftDur, trimEndFrame: cut });
+          clips.push({
+            ...c,
+            id: uid("clip"),
+            startFrame: at,
+            durationFrames: end - at,
+            trimStartFrame: cut
+          });
+        }
+        return { ...t, clips };
+      })
+    }));
+  }, []);
+
+  // Re-time a clip: keep its source in/out fixed, recompute timeline length.
+  const setClipSpeed = useCallback((clipId: string, speed: number) => {
+    const s = Math.min(8, Math.max(0.1, speed));
+    mapClip(clipId, (clip) => {
+      const oldSpeed = clip.speed || 1;
+      const sourceConsumed = clip.durationFrames * oldSpeed;
+      const durationFrames = Math.max(1, Math.round(sourceConsumed / s));
+      return {
+        ...clip,
+        speed: s,
+        durationFrames,
+        trimEndFrame: Math.round(clip.trimStartFrame + sourceConsumed)
+      };
+    });
+  }, [mapClip]);
+
+  const setClipVolume = useCallback((clipId: string, volume: number) => {
+    mapClip(clipId, (clip) => ({ ...clip, volume: Math.min(1, Math.max(0, volume)) }));
+  }, [mapClip]);
+
+  const toggleTrackMuted = useCallback((trackId: string) => {
+    setTimeline((tl) => ({
+      ...tl,
+      tracks: tl.tracks.map((t) => (t.id === trackId ? { ...t, muted: !t.muted } : t))
+    }));
+  }, []);
+
+  const toggleTrackHidden = useCallback((trackId: string) => {
+    setTimeline((tl) => ({
+      ...tl,
+      tracks: tl.tracks.map((t) => (t.id === trackId ? { ...t, hidden: !t.hidden } : t))
+    }));
+  }, []);
+
   const setPlayhead = useCallback((frame: number) => setPlayheadState(Math.max(0, Math.round(frame))), []);
 
   const serialize = useCallback(
@@ -174,6 +304,12 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       addAssetToTimeline,
       moveClip,
       removeClip,
+      trimClip,
+      splitClip,
+      setClipSpeed,
+      setClipVolume,
+      toggleTrackMuted,
+      toggleTrackHidden,
       setPlayhead,
       setPxPerFrame
     }),
@@ -192,6 +328,12 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       addAssetToTimeline,
       moveClip,
       removeClip,
+      trimClip,
+      splitClip,
+      setClipSpeed,
+      setClipVolume,
+      toggleTrackMuted,
+      toggleTrackHidden,
       setPlayhead
     ]
   );

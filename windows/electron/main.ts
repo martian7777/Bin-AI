@@ -28,7 +28,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 function outputDir(): string {
-  const dir = join(app.getPath("videos"), "PalmierPro");
+  const dir = join(app.getPath("videos"), "Bin AI");
   mkdirSync(dir, { recursive: true });
   return dir;
 }
@@ -163,8 +163,8 @@ function registerIpc() {
   ipcMain.handle("saveProject", async (_e, data: ProjectFile): Promise<string | null> => {
     const res = await dialog.showSaveDialog({
       title: "Save project",
-      defaultPath: join(app.getPath("documents"), "untitled.palmier.json"),
-      filters: [{ name: "Palmier project", extensions: ["json"] }]
+      defaultPath: join(app.getPath("documents"), "untitled.binai.json"),
+      filters: [{ name: "Bin AI project", extensions: ["json"] }]
     });
     if (res.canceled || !res.filePath) return null;
     writeFileSync(res.filePath, JSON.stringify(data, null, 2), "utf8");
@@ -175,7 +175,7 @@ function registerIpc() {
     const res = await dialog.showOpenDialog({
       title: "Open project",
       properties: ["openFile"],
-      filters: [{ name: "Palmier project", extensions: ["json"] }]
+      filters: [{ name: "Bin AI project", extensions: ["json"] }]
     });
     if (res.canceled || res.filePaths.length === 0) return null;
     const data = JSON.parse(readFileSync(res.filePaths[0], "utf8")) as ProjectFile;
@@ -190,7 +190,7 @@ function createWindow() {
     width: 1280,
     height: 820,
     backgroundColor: "#0b0b0d",
-    title: "PalmierPro",
+    title: "Bin AI",
     webPreferences: { preload: join(__dirname, "../preload/index.js") }
   });
 

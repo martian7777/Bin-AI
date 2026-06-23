@@ -2,9 +2,13 @@ import { spawn } from "node:child_process";
 import ffmpegStatic from "ffmpeg-static";
 import { isVisual, timelineTotalFrames, type MediaAsset, type Timeline } from "../shared/timeline";
 
-// ffmpeg-static resolves to a path inside node_modules; in a packaged app this
-// must be unpacked from the asar (electron-builder asarUnpack). Dev path works as-is.
-const ffmpegPath = (ffmpegStatic as unknown as string) ?? "ffmpeg";
+// ffmpeg-static resolves to a path inside node_modules. In a packaged app the
+// binary is unpacked via electron-builder `asarUnpack`, so the runtime path lands
+// in app.asar.unpacked — rewrite it. In dev the path has no app.asar, so this is a no-op.
+const ffmpegPath = ((ffmpegStatic as unknown as string) ?? "ffmpeg").replace(
+  "app.asar",
+  "app.asar.unpacked"
+);
 
 interface Plan {
   inputs: string[][]; // per-input argument lists (each ends with -i <file/source>)
@@ -13,9 +17,26 @@ interface Plan {
   audioLabel: string | null; // map target for audio, or null
 }
 
+// atempo only accepts 0.5–2.0, so chain factors for anything outside that.
+function atempoChain(speed: number): string {
+  let remaining = speed;
+  const stages: number[] = [];
+  while (remaining > 2.0) {
+    stages.push(2.0);
+    remaining /= 2.0;
+  }
+  while (remaining < 0.5) {
+    stages.push(0.5);
+    remaining /= 0.5;
+  }
+  stages.push(remaining);
+  return stages.map((s) => `atempo=${s.toFixed(4)}`).join(",");
+}
+
 // Builds an ffmpeg filtergraph that lays each clip on a black canvas at its
-// timeline position. Assumes speed=1 / no trim (what the Phase 2 UI produces);
-// trimStartFrame is still honored for forward compatibility.
+// timeline position. Honors per-clip trim (trimStartFrame) and speed: the
+// source segment fed in is durationFrames*speed long, then setpts/atempo
+// compress or stretch it back onto the timeline duration.
 function buildPlan(timeline: Timeline, assets: Map<string, MediaAsset>): Plan {
   const { fps, width: W, height: H } = timeline;
   const totalSec = Math.max(timelineTotalFrames(timeline), 1) / fps;
@@ -38,8 +59,10 @@ function buildPlan(timeline: Timeline, assets: Map<string, MediaAsset>): Plan {
     for (const clip of track.clips) {
       const asset = assets.get(clip.mediaRef);
       if (!asset) continue;
+      const speed = clip.speed || 1;
       const startSec = clip.startFrame / fps;
-      const durSec = clip.durationFrames / fps;
+      const durSec = clip.durationFrames / fps; // timeline duration
+      const srcDurSec = durSec * speed; // source segment consumed
       const endSec = startSec + durSec;
       const trimSec = clip.trimStartFrame / fps;
 
@@ -47,14 +70,17 @@ function buildPlan(timeline: Timeline, assets: Map<string, MediaAsset>): Plan {
       if (asset.type === "image") {
         inputs.push(["-loop", "1", "-t", durSec.toFixed(3), "-i", asset.filePath]);
       } else {
-        inputs.push(["-ss", trimSec.toFixed(3), "-t", durSec.toFixed(3), "-i", asset.filePath]);
+        inputs.push(["-ss", trimSec.toFixed(3), "-t", srcDurSec.toFixed(3), "-i", asset.filePath]);
       }
 
       const v = `v${vCount}`;
+      const setpts =
+        asset.type === "image" || speed === 1
+          ? `setpts=PTS-STARTPTS+${startSec.toFixed(3)}/TB`
+          : `setpts=(PTS-STARTPTS)/${speed.toFixed(4)}+${startSec.toFixed(3)}/TB`;
       visualFilters.push(
         `[${idx}:v]scale=${W}:${H}:force_original_aspect_ratio=decrease,` +
-          `pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2,setsar=1,` +
-          `setpts=PTS-STARTPTS+${startSec.toFixed(3)}/TB[${v}]`
+          `pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2,setsar=1,${setpts}[${v}]`
       );
       const out = `ov${vCount}`;
       overlays.push(
@@ -76,15 +102,17 @@ function buildPlan(timeline: Timeline, assets: Map<string, MediaAsset>): Plan {
       const vol = clip.volume;
       if (vol <= 0) continue;
 
+      const speed = clip.speed || 1;
       const startMs = Math.round((clip.startFrame / fps) * 1000);
       const trimSec = clip.trimStartFrame / fps;
-      const durSec = clip.durationFrames / fps;
+      const srcDurSec = (clip.durationFrames / fps) * speed;
       const idx = inputs.length;
-      inputs.push(["-ss", trimSec.toFixed(3), "-t", durSec.toFixed(3), "-i", asset.filePath]);
+      inputs.push(["-ss", trimSec.toFixed(3), "-t", srcDurSec.toFixed(3), "-i", asset.filePath]);
 
       const a = `a${aCount}`;
+      const tempo = speed === 1 ? "" : `${atempoChain(speed)},`;
       audioFilters.push(
-        `[${idx}:a]adelay=${startMs}|${startMs},volume=${vol.toFixed(3)}[${a}]`
+        `[${idx}:a]${tempo}adelay=${startMs}|${startMs},volume=${vol.toFixed(3)}[${a}]`
       );
       audioLabels.push(`[${a}]`);
       aCount += 1;

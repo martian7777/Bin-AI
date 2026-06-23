@@ -194,6 +194,80 @@ button.ghost {
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25);
 }
 .tl-clip.sel { box-shadow: inset 0 0 0 2px var(--text); }
-.tl-clip-label { font-size: 11px; color: #07120d; font-weight: 600; padding: 0 6px; white-space: nowrap; pointer-events: none; }
+.tl-clip-label { font-size: 11px; color: #07120d; font-weight: 600; padding: 0 6px; white-space: nowrap; pointer-events: none; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.tl-clip-speed { opacity: 0.7; }
+.tl-clip-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 2;
+}
+.tl-clip-handle.left { left: 0; }
+.tl-clip-handle.right { right: 0; }
+.tl-clip.sel .tl-clip-handle::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--text);
+  opacity: 0.85;
+}
+.tl-clip.sel .tl-clip-handle.left::after { left: 2px; }
+.tl-clip.sel .tl-clip-handle.right::after { right: 2px; }
 .tl-empty { padding: 18px; color: var(--text-dim); }
 .tl-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--danger); pointer-events: none; z-index: 5; }
+.tl-lane.hidden { opacity: 0.4; }
+
+.tl-head { justify-content: space-between; gap: 6px; }
+.tl-head-label { flex-shrink: 0; }
+.tl-head-toggles { display: flex; gap: 2px; }
+.tl-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px;
+  line-height: 1;
+  filter: grayscale(0.2);
+}
+.tl-toggle.off { opacity: 0.45; }
+
+/* ---- Clip inspector (in the timeline toolbar) ---- */
+.clip-inspector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding-left: 10px;
+  border-left: 1px solid var(--border);
+}
+.clip-inspector-name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.clip-inspector button.ghost { padding: 4px 10px; }
+.clip-speed, .clip-volume { display: flex; align-items: center; gap: 4px; }
+.clip-speed-input { width: 56px; padding: 4px 6px; }
+.clip-volume input[type="range"] { width: 80px; }
+.chip {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.chip.on { color: var(--bg); background: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* ---- Preview transport ---- */
+.preview-stage { position: relative; }
+.preview-layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.preview-transport { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.preview-transport button.play { min-width: 64px; }

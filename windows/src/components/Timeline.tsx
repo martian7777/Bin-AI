@@ -8,6 +8,7 @@ import {
   type Track
 } from "../../shared/timeline";
 import { useEditor } from "../editorStore";
+import { ClipInspector } from "./ClipInspector";
 
 const RULER_H = 24;
 const LANE_H = 56;
@@ -60,11 +61,7 @@ export function Timeline() {
         <span className="muted" style={{ marginLeft: 12 }}>
           {(totalFrames / fps).toFixed(1)}s total
         </span>
-        {ed.selectedClipId && (
-          <button className="ghost" style={{ marginLeft: "auto" }} onClick={() => ed.removeClip(ed.selectedClipId!)}>
-            Delete clip
-          </button>
-        )}
+        <ClipInspector />
       </div>
 
       <div className="tl-body">
@@ -72,7 +69,23 @@ export function Timeline() {
           <div style={{ height: RULER_H }} />
           {ed.timeline.tracks.map((t) => (
             <div className="tl-head" key={t.id} style={{ height: LANE_H }}>
-              {trackLabel(t.type)}
+              <span className="tl-head-label">{trackLabel(t.type)}</span>
+              <div className="tl-head-toggles">
+                <button
+                  className={`tl-toggle ${t.hidden ? "off" : ""}`}
+                  title={t.hidden ? "Show track" : "Hide track"}
+                  onClick={() => ed.toggleTrackHidden(t.id)}
+                >
+                  {t.hidden ? "🚫" : "👁"}
+                </button>
+                <button
+                  className={`tl-toggle ${t.muted ? "off" : ""}`}
+                  title={t.muted ? "Unmute track" : "Mute track"}
+                  onClick={() => ed.toggleTrackMuted(t.id)}
+                >
+                  {t.muted ? "🔇" : "🔊"}
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -110,7 +123,7 @@ export function Timeline() {
 
 function Lane({ track }: { track: Track }) {
   return (
-    <div className="tl-lane" style={{ height: LANE_H }}>
+    <div className={`tl-lane ${track.hidden ? "hidden" : ""}`} style={{ height: LANE_H }}>
       {track.clips.map((clip) => (
         <ClipBlock key={clip.id} clip={clip} />
       ))}
@@ -121,6 +134,7 @@ function Lane({ track }: { track: Track }) {
 function ClipBlock({ clip }: { clip: Clip }) {
   const ed = useEditor();
   const drag = useRef<{ startX: number; origStart: number; moved: boolean } | null>(null);
+  const trim = useRef<{ edge: "start" | "end"; startX: number; applied: number } | null>(null);
 
   const onPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
@@ -141,8 +155,35 @@ function ClipBlock({ clip }: { clip: Clip }) {
     drag.current = null;
   };
 
+  // Edge-handle trim: apply integer-frame deltas relative to the pointer's
+  // total travel so low zoom levels don't drift.
+  const onHandleDown = (edge: "start" | "end") => (e: React.PointerEvent) => {
+    e.stopPropagation();
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    ed.selectClip(clip.id);
+    trim.current = { edge, startX: e.clientX, applied: 0 };
+  };
+
+  const onHandleMove = (e: React.PointerEvent) => {
+    if (!trim.current) return;
+    e.stopPropagation();
+    const total = Math.round((e.clientX - trim.current.startX) / ed.pxPerFrame);
+    const step = total - trim.current.applied;
+    if (step !== 0) {
+      ed.trimClip(clip.id, trim.current.edge, step);
+      trim.current.applied = total;
+    }
+  };
+
+  const onHandleUp = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    trim.current = null;
+  };
+
   const selected = ed.selectedClipId === clip.id;
   const asset = ed.assetById(clip.mediaRef);
+  const speed = clip.speed || 1;
 
   return (
     <div
@@ -157,7 +198,22 @@ function ClipBlock({ clip }: { clip: Clip }) {
       onPointerUp={onPointerUp}
       title={`${asset?.name ?? clip.mediaRef} · ${clip.startFrame}–${clipEndFrame(clip)}f`}
     >
-      <span className="tl-clip-label">{asset?.name ?? clip.mediaType}</span>
+      <div
+        className="tl-clip-handle left"
+        onPointerDown={onHandleDown("start")}
+        onPointerMove={onHandleMove}
+        onPointerUp={onHandleUp}
+      />
+      <span className="tl-clip-label">
+        {asset?.name ?? clip.mediaType}
+        {speed !== 1 && <span className="tl-clip-speed"> {speed}×</span>}
+      </span>
+      <div
+        className="tl-clip-handle right"
+        onPointerDown={onHandleDown("end")}
+        onPointerMove={onHandleMove}
+        onPointerUp={onHandleUp}
+      />
     </div>
   );
 }

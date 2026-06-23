@@ -29,8 +29,8 @@ export const openrouter: ProviderImpl = {
       headers: {
         Authorization: `Bearer ${rt.apiKey}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://palmier.local",
-        "X-Title": "PalmierPro for Windows"
+        "HTTP-Referer": "https://bin-ai.local",
+        "X-Title": "Bin AI"
       },
       body: JSON.stringify({ model: req.model, messages })
     });
@@ -47,8 +47,8 @@ export const openrouter: ProviderImpl = {
       headers: {
         Authorization: `Bearer ${rt.apiKey}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://palmier.local",
-        "X-Title": "PalmierPro for Windows"
+        "HTTP-Referer": "https://bin-ai.local",
+        "X-Title": "Bin AI"
       },
       body: JSON.stringify({
         model: req.model,

@@ -12,7 +12,7 @@ export function KeysSettings({
     <div className="col">
       <p className="muted" style={{ marginTop: 0 }}>
         Keys are encrypted at rest with the Windows credential store and are sent only to the
-        provider you call. Nothing routes through any Palmier server.
+        provider you call. Nothing routes through any Bin AI server.
       </p>
       {providers.map((p) => (
         <KeyCard key={p.id} provider={p} onChange={onChange} />

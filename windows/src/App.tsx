@@ -46,8 +46,8 @@ export function App() {
           <div className="card">
             <h3>No API keys yet</h3>
             <p className="muted">
-              PalmierPro for Windows runs AI generation through your own provider accounts — no
-              subscription, no credits. Add at least one key under <b>API Keys</b> to begin.
+              Bin AI runs generation through your own provider accounts — no subscription, no
+              credits. Add at least one key under <b>API Keys</b> to begin.
             </p>
             <button className="primary" onClick={() => setTab("settings")}>
               Add a key

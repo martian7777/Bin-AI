@@ -18,6 +18,10 @@ export function Editor() {
         e.preventDefault();
         ed.removeClip(ed.selectedClipId);
       }
+      if ((e.key === "s" || e.key === "S") && !e.metaKey && !e.ctrlKey && ed.selectedClipId) {
+        e.preventDefault();
+        ed.splitClip(ed.selectedClipId, ed.playhead);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
