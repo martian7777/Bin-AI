@@ -2,12 +2,12 @@
 
 <div align="center">
 
-# Palmier Pro
+# Bin AI
 
 **Trình biên tập video được xây dựng cho AI.**
 
-<a href="https://github.com/palmier-io/palmier-pro/releases/latest/download/PalmierPro.dmg">
-  <img src="../../assets/macos-badge.png" alt="Tải Palmier Pro cho macOS" width="180" />
+<a href="https://github.com/martian7777/Bin-AI/releases/latest/download/BinAI.dmg">
+  <img src="../../assets/macos-badge.png" alt="Tải Bin AI cho macOS" width="180" />
 </a>
 
 <sub><i>Yêu cầu macOS 26 (Tahoe) trên Apple Silicon</i></sub>
@@ -35,15 +35,15 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="Giao diện Palmier Pro" width="900" />
+<img src="../../assets/palmier-ui.png" alt="Giao diện Bin AI" width="900" />
 
 ---
 
-Palmier Pro là trình biên tập video mã nguồn mở cho Mac. Bạn và agent của bạn có thể cùng tạo và chỉnh sửa video ngay trong timeline.
+Bin AI là trình biên tập video mã nguồn mở cho Mac. Bạn và agent của bạn có thể cùng tạo và chỉnh sửa video ngay trong timeline.
 
 ### Trình biên tập video thuần Swift
 
-Chúng tôi xây dựng Palmier Pro từ đầu bằng Swift. Mốc tham chiếu là Premiere Pro, với cách riêng của chúng tôi để tích hợp AI vào quy trình làm việc.
+Chúng tôi xây dựng Bin AI từ đầu bằng Swift. Mốc tham chiếu là Premiere Pro, với cách riêng của chúng tôi để tích hợp AI vào quy trình làm việc.
 
 ### AI tạo sinh tích hợp sẵn
 
@@ -55,16 +55,16 @@ Kết nối Claude, Codex hoặc Cursor qua MCP, hoặc dùng agent trong app đ
 
 ## MCP server
 
-Khi app đang mở, Palmier Pro cung cấp MCP server tại `http://127.0.0.1:19789/mcp` qua HTTP. Cách kết nối:
+Khi app đang mở, Bin AI cung cấp MCP server tại `http://127.0.0.1:19789/mcp` qua HTTP. Cách kết nối:
 
 **Claude Code**
 ```bash
-claude mcp add --transport http palmier-pro http://127.0.0.1:19789/mcp
+claude mcp add --transport http bin-ai http://127.0.0.1:19789/mcp
 ```
 
 **Codex**
 ```bash
-codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
+codex mcp add bin-ai --url http://127.0.0.1:19789/mcp
 ```
 
 **Cursor**
@@ -74,7 +74,7 @@ Cách dễ nhất là mở `Help` -> `MCP Instructions` -> `Install in Cursor` t
 ```
 {
   "mcpServers": {
-    "palmier-pro": {
+    "bin-ai": {
       "type": "http",
       "url": "http://127.0.0.1:19789/mcp"
     }
@@ -88,7 +88,7 @@ Chúng tôi đóng gói một [mcpb](https://github.com/modelcontextprotocol/mcp
 
 ## FAQ
 
-**Palmier Pro có hoàn toàn mã nguồn mở không?**
+**Bin AI có hoàn toàn mã nguồn mở không?**
 
 Trình biên tập video, không bao gồm các tính năng AI tạo sinh, hoàn toàn là mã nguồn mở. MCP server và agent chat cũng là mã nguồn mở. Phần duy nhất đóng nguồn là xử lý AI tạo sinh.
 
@@ -113,20 +113,20 @@ Xem [CONTRIBUTING.md](../../CONTRIBUTING.md).
 - **Discord:** Tham gia cộng đồng trên **[Discord](https://discord.com/invite/SMVW6pKYmg)**.
 - **Twitter / X:** Theo dõi **[@Palmier_io](https://x.com/Palmier_io)** để nhận cập nhật và thông báo.
 - **Instagram:** Theo dõi [@palmier.io](https://www.instagram.com/palmier.io).
-- **Phản hồi và hỗ trợ:** Tạo [GitHub Issue](https://github.com/palmier-io/palmier-pro/issues) hoặc gửi email tới founders@palmier.io.
+- **Phản hồi và hỗ trợ:** Tạo [GitHub Issue](https://github.com/martian7777/Bin-AI/issues) hoặc gửi email tới founders@palmier.io.
 
 ## Star History
 
-<a href="https://www.star-history.com/?type=date&repos=palmier-io%2Fpalmier-pro">
+<a href="https://www.star-history.com/?type=date&repos=martian7777%2FBin-AI">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left" />
-   <img alt="Biểu đồ Star History" src="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&legend=top-left" />
+   <img alt="Biểu đồ Star History" src="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&legend=top-left" />
  </picture>
 </a>
 
 ## Giấy phép
 
-Copyright (C) 2026 Palmier, Inc.
+Copyright (C) 2026 Bin AI
 
-Palmier Pro là mã nguồn mở theo [GPLv3](../../LICENSE).
+Bin AI là mã nguồn mở theo [GPLv3](../../LICENSE).

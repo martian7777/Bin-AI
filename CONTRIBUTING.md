@@ -15,8 +15,8 @@ With AI coding, human reviews are the bottleneck. We don't have the bandwidth to
 
 ### Develop
 ```bash
-git clone https://github.com/palmier-io/palmier-pro
-cd palmier-pro
+git clone https://github.com/martian7777/Bin-AI.git
+cd Bin-AI
 
 swift build
 swift run

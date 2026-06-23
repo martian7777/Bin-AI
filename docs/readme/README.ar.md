@@ -2,12 +2,12 @@
 
 <div align="center">
 
-# Palmier Pro
+# Bin AI
 
 **محرر فيديو مصمم لعصر الذكاء الاصطناعي.**
 
-<a href="https://github.com/palmier-io/palmier-pro/releases/latest/download/PalmierPro.dmg">
-  <img src="../../assets/macos-badge.png" alt="تنزيل Palmier Pro لنظام macOS" width="180" />
+<a href="https://github.com/martian7777/Bin-AI/releases/latest/download/BinAI.dmg">
+  <img src="../../assets/macos-badge.png" alt="تنزيل Bin AI لنظام macOS" width="180" />
 </a>
 
 <sub><i>يتطلب macOS 26 (Tahoe) على Apple Silicon لتحميله</i></sub>
@@ -35,15 +35,15 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="واجهة Palmier Pro" width="900" />
+<img src="../../assets/palmier-ui.png" alt="واجهة Bin AI" width="900" />
 
 ---
 
-بالمي برو (Palmier Pro) هو محرر فيديو مفتوح المصدر لنظام macOS. يتيح لك العمل جنبًا إلى جنب مع المساعد الذكي الخاص بك لإنشاء الفيديوهات وتحريرها داخل الخط الزمني (Timeline) نفسه.
+بالمي برو (Bin AI) هو محرر فيديو مفتوح المصدر لنظام macOS. يتيح لك العمل جنبًا إلى جنب مع المساعد الذكي الخاص بك لإنشاء الفيديوهات وتحريرها داخل الخط الزمني (Timeline) نفسه.
 
 ### محرر فيديو Swift-native
 
-تم تطوير بالمي برو (Palmier Pro) من الصفر باستخدام Swift. استلهمنا تجربة الاستخدام من Premiere Pro، مع إعادة تصميمها لتناسب أدوات الذكاء الاصطناعي الحديثة وسير العمل المعتمد عليها.
+تم تطوير بالمي برو (Bin AI) من الصفر باستخدام Swift. استلهمنا تجربة الاستخدام من Premiere Pro، مع إعادة تصميمها لتناسب أدوات الذكاء الاصطناعي الحديثة وسير العمل المعتمد عليها.
 
 ### ذكاء اصطناعي توليدي مدمج (Generative AI)
 
@@ -58,12 +58,12 @@
 
 **Claude Code**
 ```bash
-claude mcp add --transport http palmier-pro http://127.0.0.1:19789/mcp
+claude mcp add --transport http bin-ai http://127.0.0.1:19789/mcp
 ```
 
 **Codex**
 ```bash
-codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
+codex mcp add bin-ai --url http://127.0.0.1:19789/mcp
 ```
 
 **Cursor**
@@ -73,7 +73,7 @@ codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
 ```
 {
   "mcpServers": {
-    "palmier-pro": {
+    "bin-ai": {
       "type": "http",
       "url": "http://127.0.0.1:19789/mcp"
     }
@@ -87,7 +87,7 @@ codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
 
 ## FAQ
 
-**هل Palmier Pro بالكامل open source؟**
+**هل Bin AI بالكامل open source؟**
 
 محرر الفيديو، بدون ميزات generative AI، مفتوح المصدر بالكامل. MCP server وagent chat مفتوحا المصدر أيضًا. الجزء الوحيد closed source هو معالجة generative AI.
 
@@ -99,7 +99,7 @@ codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
 
 **ما المنصات المدعومة؟**
 
-يدعم Palmier Pro حاليًا:
+يدعم Bin AI حاليًا:
 * macOS 26 (Tahoe)
 * أجهزة Apple Silicon فقط
   
@@ -114,20 +114,20 @@ codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
 - **Discord:** انضم إلى المجتمع على **[Discord](https://discord.com/invite/SMVW6pKYmg)**.
 - **Twitter / X:** تابع **[@Palmier_io](https://x.com/Palmier_io)** للحصول على التحديثات والإعلانات.
 - **Instagram:** تابع [@palmier.io](https://www.instagram.com/palmier.io).
-- **Feedback والدعم:** افتح [GitHub Issue](https://github.com/palmier-io/palmier-pro/issues) أو راسلنا على founders@palmier.io.
+- **Feedback والدعم:** افتح [GitHub Issue](https://github.com/martian7777/Bin-AI/issues) أو راسلنا على founders@palmier.io.
 
 ## Star History
 
-<a href="https://www.star-history.com/?type=date&repos=palmier-io%2Fpalmier-pro">
+<a href="https://www.star-history.com/?type=date&repos=martian7777%2FBin-AI">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left" />
-   <img alt="مخطط Star History" src="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&legend=top-left" />
+   <img alt="مخطط Star History" src="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&legend=top-left" />
  </picture>
 </a>
 
 ## License
 
-Copyright (C) 2026 Palmier, Inc.
+Copyright (C) 2026 Bin AI
 
-Palmier Pro مفتوح المصدر بموجب [GPLv3](../../LICENSE).
+Bin AI مفتوح المصدر بموجب [GPLv3](../../LICENSE).

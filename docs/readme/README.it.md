@@ -2,12 +2,12 @@
 
 <div align="center">
 
-# Palmier Pro
+# Bin AI
 
 **Il video editor creato per l'AI.**
 
-<a href="https://github.com/palmier-io/palmier-pro/releases/latest/download/PalmierPro.dmg">
-  <img src="../../assets/macos-badge.png" alt="Scarica Palmier Pro per macOS" width="180" />
+<a href="https://github.com/martian7777/Bin-AI/releases/latest/download/BinAI.dmg">
+  <img src="../../assets/macos-badge.png" alt="Scarica Bin AI per macOS" width="180" />
 </a>
 
 <sub><i>Richiede macOS 26 (Tahoe) su Apple Silicon</i></sub>
@@ -35,15 +35,15 @@
 
 </div>
 
-<img src="../../assets/palmier-ui.png" alt="Interfaccia di Palmier Pro" width="900" />
+<img src="../../assets/palmier-ui.png" alt="Interfaccia di Bin AI" width="900" />
 
 ---
 
-Palmier Pro è un video editor open source per Mac. Tu e il tuo agent potete generare e modificare video insieme dentro la timeline.
+Bin AI è un video editor open source per Mac. Tu e il tuo agent potete generare e modificare video insieme dentro la timeline.
 
 ### Video editor nativo Swift
 
-Abbiamo costruito Palmier Pro da zero con Swift. Il riferimento è Premiere Pro, con il nostro modo di integrare l'AI nel workflow.
+Abbiamo costruito Bin AI da zero con Swift. Il riferimento è Premiere Pro, con il nostro modo di integrare l'AI nel workflow.
 
 ### AI generativa integrata
 
@@ -59,12 +59,12 @@ Quando l'app è aperta, espone un server MCP su `http://127.0.0.1:19789/mcp` tra
 
 **Claude Code**
 ```bash
-claude mcp add --transport http palmier-pro http://127.0.0.1:19789/mcp
+claude mcp add --transport http bin-ai http://127.0.0.1:19789/mcp
 ```
 
 **Codex**
 ```bash
-codex mcp add palmier-pro --url http://127.0.0.1:19789/mcp
+codex mcp add bin-ai --url http://127.0.0.1:19789/mcp
 ```
 
 **Cursor**
@@ -74,7 +74,7 @@ Il modo più semplice è aprire nell'app `Help` -> `MCP Instructions` -> `Instal
 ```
 {
   "mcpServers": {
-    "palmier-pro": {
+    "bin-ai": {
       "type": "http",
       "url": "http://127.0.0.1:19789/mcp"
     }
@@ -88,7 +88,7 @@ Includiamo un [mcpb](https://github.com/modelcontextprotocol/mcpb) con l'app che
 
 ## FAQ
 
-**Palmier Pro è completamente open source?**
+**Bin AI è completamente open source?**
 
 Il video editor, senza le funzioni di AI generativa, è completamente open source. Anche il server MCP e la chat dell'agent sono open source. L'unica parte closed source è l'elaborazione dell'AI generativa.
 
@@ -113,20 +113,20 @@ Vedi [CONTRIBUTING.md](../../CONTRIBUTING.md).
 - **Discord:** Entra nella community su **[Discord](https://discord.com/invite/SMVW6pKYmg)**.
 - **Twitter / X:** Segui **[@Palmier_io](https://x.com/Palmier_io)** per aggiornamenti e annunci.
 - **Instagram:** Segui [@palmier.io](https://www.instagram.com/palmier.io).
-- **Feedback e supporto:** Crea una [GitHub Issue](https://github.com/palmier-io/palmier-pro/issues) o scrivici a founders@palmier.io.
+- **Feedback e supporto:** Crea una [GitHub Issue](https://github.com/martian7777/Bin-AI/issues) o scrivici a founders@palmier.io.
 
 ## Star History
 
-<a href="https://www.star-history.com/?type=date&repos=palmier-io%2Fpalmier-pro">
+<a href="https://www.star-history.com/?type=date&repos=martian7777%2FBin-AI">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left" />
-   <img alt="Grafico Star History" src="https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&legend=top-left" />
+   <img alt="Grafico Star History" src="https://api.star-history.com/chart?repos=martian7777/Bin-AI&type=date&legend=top-left" />
  </picture>
 </a>
 
 ## Licenza
 
-Copyright (C) 2026 Palmier, Inc.
+Copyright (C) 2026 Bin AI
 
-Palmier Pro è open source sotto [GPLv3](../../LICENSE).
+Bin AI è open source sotto [GPLv3](../../LICENSE).
