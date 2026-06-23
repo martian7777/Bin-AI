@@ -9,8 +9,11 @@
 <a href="https://github.com/martian7777/Bin-AI/releases/latest/download/BinAI.dmg">
   <img src="../../assets/macos-badge.png" alt="下载 macOS 版 Bin AI" width="180" />
 </a>
+<a href="https://github.com/martian7777/Bin-AI/releases/latest/download/Bin-AI-Setup.exe">
+  <img src="../../assets/windows-badge.png" alt="下载 Windows 版 Bin AI" width="180" />
+</a>
 
-<sub><i>需要搭载 Apple Silicon 的 macOS 26 (Tahoe)</i></sub>
+<sub><i>需要搭载 Apple Silicon 的 macOS 26 (Tahoe) / Windows 10/11</i></sub>
 
 
 <p>

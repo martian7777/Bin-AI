@@ -9,8 +9,11 @@
 <a href="https://github.com/martian7777/Bin-AI/releases/latest/download/BinAI.dmg">
   <img src="../../assets/macos-badge.png" alt="Scarica Bin AI per macOS" width="180" />
 </a>
+<a href="https://github.com/martian7777/Bin-AI/releases/latest/download/Bin-AI-Setup.exe">
+  <img src="../../assets/windows-badge.png" alt="Download Bin AI for Windows" width="180" />
+</a>
 
-<sub><i>Richiede macOS 26 (Tahoe) su Apple Silicon</i></sub>
+<sub><i>Richiede macOS 26 (Tahoe) su Apple Silicon / Windows 10/11</i></sub>
 
 
 <p>
